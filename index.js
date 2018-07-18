@@ -58,7 +58,7 @@ AFRAME.registerComponent('fit-texture', {
     var widthHeightRatio = this.dimensions.h / this.dimensions.w;
 
     if (geometry.width && geometry.height) {
-      if (widthHeightRatio < 0) {
+      if (widthHeightRatio < 1) {
         el.setAttribute('height', geometry.width * widthHeightRatio);
       } else {
         el.setAttribute('width', geometry.height / widthHeightRatio);
