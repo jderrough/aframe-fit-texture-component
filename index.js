@@ -33,23 +33,23 @@ AFRAME.registerComponent('fit-texture', {
        var textureLoaded = function(e) {
 
           var w = e.detail.texture.image.videoWidth || e.detail.texture.image.width;
-          
+
           var h = e.detail.texture.image.videoHeight || e.detail.texture.image.height;
-          
+
           // Don't apply transformation on incomplete info
           if(h === 0 || w === 0) return;
-          
+
           // Save dimensions for later updates to `fit-texture`, see above.
           self.dimensions = {w:w, h:h};
-          
+
           self.applyTransformation();
        }
        el.addEventListener('materialvideoloadeddata', textureLoaded);
        el.addEventListener('materialtextureloaded', textureLoaded);
-      
+
      }
    },
-   
+
    applyTransformation: function () {
     var el = this.el;
     var geometry = el.getAttribute('geometry');
@@ -58,9 +58,12 @@ AFRAME.registerComponent('fit-texture', {
     var widthHeightRatio = this.dimensions.h / this.dimensions.w;
 
     if (geometry.width && geometry.height) {
-      console.warn('Using `fit-texture` component on an element with both width and height. Therefore keeping width and changing height to fit the texture. If you want to manually set both width and height, set `fit-texture="false"`. ');
-    }
-    if (geometry.width) {
+      if (widthHeightRatio > 0) {
+        el.setAttribute('height', geometry.width * widthHeightRatio);
+      } else {
+        el.setAttribute('width', geometry.height / widthHeightRatio);
+      }
+    } else if (geometry.width) {
       el.setAttribute('height', geometry.width * widthHeightRatio);
     } else if (geometry.height) {
       el.setAttribute('width', geometry.height / widthHeightRatio);
